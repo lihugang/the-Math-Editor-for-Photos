@@ -1,0 +1,48 @@
+{
+  "name": "math-editor-for-photos",
+  "version": "1.0.0",
+  "description": "open images, edit them with math pattern(latex), save fast",
+  "main": "index.js",
+  "author": "lihugang",
+  "license": "GPL3",
+  "dependencies": {
+    "vue": "^3.2.45"
+  },
+  "devDependencies": {
+    "electron": "^22.0.0"
+  },
+  "build": {
+    "productName": "MEP",
+    "files": [
+      "index.js",
+      "package.json",
+      "page"
+    ],
+    "appId": "person.lihugang.MEP",
+    "copyright": "Copyright (c) 2022 MEP",
+    "compression": "normal",
+    "directories": {
+      "output": "build"
+    },
+    "asar": true,
+    "win": {
+      "target": [
+        {
+          "target": "nsis",
+          "arch": [
+            "ia32"
+          ]
+        }
+      ]
+    },
+    "nsis": {
+      "oneClick": false,
+      "perMachine": false,
+      "allowElevation": true,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true,
+      "shortcutName": "MEP"
+    }
+  }
+}
