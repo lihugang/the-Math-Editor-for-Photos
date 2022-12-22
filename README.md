@@ -7,7 +7,7 @@
 - Based on electron 22
 - - -
 ### LICENSE
-The project: GPL3
-vue: MIT
-katex: MIT
-html2canvas: MIT
+The project: GPL3  
+vue: MIT  
+katex: MIT  
+html2canvas: MIT  
