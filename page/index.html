@@ -43,20 +43,27 @@
             background-color: whitesmoke;
         }
     </style>
-    <link rel="stylesheet" href="./katex/katex.css">
-    <script src="./katex/katex.js" defer></script>
+    <link rel="stylesheet" href="./katex/katex.min.css">
+    <script src="./vue3.js" defer></script>
+    <script src="./katex/katex.min.js" defer></script>
     <script src="./html2canvas.js" defer></script>
     <script>
+        const fs = require('fs');
+        var userConfig = {};
+        try {
+            userConfig = JSON.parse(fs.readFileSync(`${process.env.HOME}/.meprc`).toString());
+        } catch (e) {
+
+        };
         document.addEventListener('DOMContentLoaded', () => {
-            const vue = require('vue');
-            vue.createApp({
+            Vue.createApp({
                 data() {
                     return {
                         filename: 'unknown',
                         marks: [],
                         activeMark: '',
-                        color: '#ff0000',
-                        size: 12,
+                        color: userConfig.color || '#ff0000',
+                        size: userConfig.size || 12,
                         image: {
                             url: '',
                             blob: '',
@@ -67,7 +74,7 @@
                 },
                 methods: {
                     reRender() {
-                        const marks = vue.toRaw(this.marks);
+                        const marks = Vue.toRaw(this.marks);
                         this.$nextTick(() => {
                             this.marks = [];
                             this.$nextTick(() => {
@@ -112,14 +119,15 @@
                         };
                     },
                     createMark($event) {
+                        if (!this.image.blob) return alert('You must import an image');
                         this.marks.push({
                             content: '',
                             pos: {
                                 x: $event.layerX / this.getImageSize().width,
                                 y: $event.layerY / this.getImageSize().height
                             },
-                            color: vue.toRaw(this.color),
-                            size: vue.toRaw(this.size),
+                            color: Vue.toRaw(this.color),
+                            size: Vue.toRaw(this.size),
                             id: Math.random().toString(36).substring(2)
                         });
                         this.activeMark = this.marks.at(-1).id;
@@ -136,16 +144,22 @@
                     renderLatex(str) {
                         str = str.replaceAll('\n', '<br />');
 
-                        const mathContents = str.match(/\$.*?\$/g);
-                        if (!mathContents) return str;
-                        for (let i = 0; i < mathContents.length; i++) {
-                            // console.log(mathContents[i]);
-                            str = str.replace(mathContents[i], katex.renderToString(mathContents[i].substring(1, mathContents[i].length - 1), {
-                                strict: 'ignore',
-                                throwOnError: false
-                            }));
-                        }
-                        return str;
+                        // const mathContents = str.match(/\$.*?\$/g);
+                        // if (!mathContents) return str;
+                        // for (let i = 0; i < mathContents.length; i++) {
+                        //     // console.log(mathContents[i]);
+                        //     str = str.replace(mathContents[i], katex.renderToString(mathContents[i].substring(1, mathContents[i].length - 1), {
+                        //         strict: 'ignore',
+                        //         throwOnError: false,
+                        //         macros: userConfig.macros || {}
+                        //     }));
+                        // }
+                        // return str;
+                        return katex.renderToString(str, {
+                            strict: 'ignore',
+                            throwOnError: false,
+                            macros: userConfig.macros || {}
+                        });
                     },
                     editMark(item) {
                         this.activeMark = item.id;
@@ -162,7 +176,10 @@
                     },
                     newWindow() {
                         // window.open('index.html', '_blank', `height=${window.outerHeight},width=${window.outerWidth}`)
-                        window.require('electron').ipcRenderer.send('newWindow');
+                        window.require('electron').ipcRenderer.send('newWindow-main');
+                    },
+                    openSettingsPage() {
+                        window.require('electron').ipcRenderer.send('newWindow-setting');
                     },
                     exportImage(type) {
                         if (type === 'original') {
@@ -178,7 +195,7 @@
                                 reader.onload = () => {
                                     const json = {
                                         image: reader.result,
-                                        marks: vue.toRaw(this.marks),
+                                        marks: Vue.toRaw(this.marks),
                                         filename: this.image.blob.name
                                     };
                                     const blob = new Blob([JSON.stringify(json)], { type: 'image/imm' });
@@ -194,7 +211,7 @@
                         };
                         if (type === 'edit') {
                             if (this.image.blob) {
-                                const activeMark = vue.toRaw(this.activeMark);
+                                const activeMark = Vue.toRaw(this.activeMark);
                                 this.activeMark = '';
                                 (async () => {
                                     const imgs = await Promise.all(this.marks.map(mark => this.markToImage(mark)));
@@ -256,6 +273,8 @@
         <input type="file" accept="image/*, .imm" @change="loadImage($event)">
         <br />
         Color: <input type="color" v-model="color"> Size: <input type="number" v-model="size" style="width: 32px">
+        &nbsp;
+        <button @click="openSettingsPage">Open settings page</button>
         <br />
         <button @click="exportImage('original')">Export original image</button> &nbsp; <button
             @click="exportImage('imm')">Export imm file</button> &nbsp; <button @click="exportImage('edit')">Export

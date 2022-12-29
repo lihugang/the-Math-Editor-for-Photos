@@ -1,12 +1,11 @@
 {
   "name": "math-editor-for-photos",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "open images, edit them with math pattern(latex), save fast",
   "main": "index.js",
   "author": "lihugang",
   "license": "GPL3",
   "dependencies": {
-    "vue": "^3.2.45"
   },
   "devDependencies": {
     "electron": "^22.0.0"
@@ -20,11 +19,11 @@
     ],
     "appId": "person.lihugang.MEP",
     "copyright": "Copyright (c) 2022 MEP",
-    "compression": "normal",
+    "compression": "maximum",
     "directories": {
       "output": "build"
     },
-    "asar": true,
+    "asar": false,
     "win": {
       "target": [
         {

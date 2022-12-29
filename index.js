@@ -33,7 +33,7 @@ app.on('ready', () => {
     mainWindow.loadURL(path.join(__dirname, 'page', 'index.html'));
 });
 
-electron.ipcMain.on('newWindow', () => {
+electron.ipcMain.on('newWindow-main', () => {
     const w = new BrowserWindow({
         width: 450,
         height: 800,
@@ -56,4 +56,33 @@ electron.ipcMain.on('newWindow', () => {
     if (debugFlag) w.webContents.openDevTools();
 
     w.loadURL(path.join(__dirname, 'page', 'index.html'));
+
+})
+
+electron.ipcMain.on('newWindow-setting', () => {
+    const w = new BrowserWindow({
+        width: 450,
+        height: 800,
+        resizable: true,
+        minimizable: true,
+        maximizable: true,
+        closeable: true,
+        fullscreen: false,
+        fullscreenable: true,
+        alwaysOnTop: false,
+        skipTaskbar: false,
+        frame: true,
+        webPreferences: {
+            nodeIntegration: true,
+            nodeIntegrationInSubFrames: true,
+            contextIsolation: false,
+            webSecurity: false,
+        }
+    });
+    if (debugFlag) w.webContents.openDevTools();
+
+
+    w.loadURL(path.join(__dirname, 'page', 'setting.html'));
+
+
 })
