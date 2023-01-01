@@ -12,6 +12,6 @@ vue: MIT
 katex: MIT    
 html2canvas: MIT
 - - -
-### CHANGE LOG
-- 1.0.0 -> 1.1.0 add settings, support latex new command
-- 1.1.0 -> 1.1.1 fix .meprc missing problem
+### CHANGE LOG   
+- 1.0.0 -> 1.1.0 add settings, support latex new command   
+- 1.1.0 -> 1.1.1 fix .meprc missing problem   
