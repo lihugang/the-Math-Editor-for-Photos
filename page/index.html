@@ -51,7 +51,7 @@
         const fs = require('fs');
         var userConfig = {};
         try {
-            userConfig = JSON.parse(fs.readFileSync(`${process.env.HOME}/.meprc`).toString());
+            userConfig = JSON.parse(fs.readFileSync(`.meprc`).toString());
         } catch (e) {
 
         };
@@ -142,24 +142,18 @@
                         }
                     },
                     renderLatex(str) {
-                        str = str.replaceAll('\n', '<br />');
-
                         // const mathContents = str.match(/\$.*?\$/g);
-                        // if (!mathContents) return str;
-                        // for (let i = 0; i < mathContents.length; i++) {
-                        //     // console.log(mathContents[i]);
-                        //     str = str.replace(mathContents[i], katex.renderToString(mathContents[i].substring(1, mathContents[i].length - 1), {
-                        //         strict: 'ignore',
-                        //         throwOnError: false,
-                        //         macros: userConfig.macros || {}
-                        //     }));
-                        // }
-                        // return str;
-                        return katex.renderToString(str, {
-                            strict: 'ignore',
-                            throwOnError: false,
-                            macros: userConfig.macros || {}
-                        });
+                        const mathContents = str.split('\n');
+                        if (!mathContents) return str;
+                        for (let i = 0; i < mathContents.length; i++) {
+                            // console.log(mathContents[i]);
+                            mathContents[i] = katex.renderToString(mathContents[i], {
+                                strict: 'ignore',
+                                throwOnError: false,
+                                macros: userConfig.macros || {}
+                            });
+                        }
+                        return mathContents.join('<br />');
                     },
                     editMark(item) {
                         this.activeMark = item.id;

@@ -16,7 +16,7 @@
         const fs = require('fs');
         var userConfig = {};
         try {
-            userConfig = JSON.parse(fs.readFileSync(`${process.env.HOME}/.meprc`).toString());
+            userConfig = JSON.parse(fs.readFileSync(`.meprc`).toString());
         } catch (e) {
 
         };
@@ -41,7 +41,7 @@
                         this.new_key = '', this.new_value = '';
                     },
                     saveConfig() {
-                        fs.writeFileSync(`${process.env.HOME}/.meprc`, JSON.stringify({
+                        fs.writeFileSync(`.meprc`, JSON.stringify({
                             color: this.color,
                             size: this.size,
                             macros: this.macros
