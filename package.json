@@ -1,6 +1,6 @@
 {
   "name": "math-editor-for-photos",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "open images, edit them with math pattern(latex), save fast",
   "main": "index.js",
   "author": "lihugang",
