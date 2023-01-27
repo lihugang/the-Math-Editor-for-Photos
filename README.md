@@ -1,4 +1,6 @@
 # The Math Editor for Photos(MEP)
+- - -
+# Notice: This repository has been archived. For the next-generation of MEP, please visit <https://github.com/lihugang/mep2>
 ## version 1.1.1
 - - -
 ### Features
